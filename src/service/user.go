@@ -13,11 +13,10 @@ func (user) AddUser(user *model.User) error {
 	return dao.AddUser(user)
 }
 
-
 func (user) Delete(id int) error {
 	return dao.DeleteUser(id)
 }
 
-func (user) ListByPage(page int, pageSize int) ([]model.User, error) {
+func (user) ListByPage(page int, pageSize int) ([]model.User, int, error) {
 	return dao.ListByPage(page, pageSize)
 }

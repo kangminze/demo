@@ -6,8 +6,8 @@ import (
 )
 
 func AddUser(user *model.User) error {
-	if err :=db.Create(user).Error; err != nil {
-		wzap.Error("create user error","error",err.Error(), "user", user)
+	if err := db.Create(user).Error; err != nil {
+		wzap.Error("create user error", "error", err.Error(), "user", user)
 		return err
 	}
 	return nil
@@ -15,7 +15,7 @@ func AddUser(user *model.User) error {
 
 func DeleteUser(id int) error {
 
-	if err := db.Where("ID=?",id).Delete(model.User{}).Error; err != nil {
+	if err := db.Where("ID=?", id).Delete(model.User{}).Error; err != nil {
 		wzap.Error("delete user error", "error", err.Error(), "id", id)
 		return err
 	}
@@ -23,12 +23,15 @@ func DeleteUser(id int) error {
 
 }
 
-func ListByPage(page int, pageSize int) ([]model.User,error) {
+func ListByPage(page int, pageSize int) ([]model.User, int, error) {
+	Db := db
 	users := make([]model.User, 0)
-	db.Limit(pageSize).Offset((page - 1) * pageSize)
-	if err :=db.Find(&users).Error ;err != nil {
-		wzap.Error("delete user error", "error", err.Error(), "page", page,"pageSize",pageSize)
-		return nil,err
+	total := 0
+	Db.Model(&model.User{}).Count(&total)
+	Db = Db.Limit(pageSize).Offset((page - 1) * pageSize)
+	if err := Db.Find(&users).Error; err != nil {
+		wzap.Error("delete user error", "error", err.Error(), "page", page, "pageSize", pageSize)
+		return nil, 0, err
 	}
-	return users,nil
+	return users, total, nil
 }

@@ -26,41 +26,46 @@ func (u *UserController) AddUser(c *gin.Context) {
 			"data": err.Error(),
 		})
 	}
-	wzap.Debug("user message",&tmpuser)
+	wzap.Debug("user message", &tmpuser)
 	service.User.AddUser(&tmpuser)
-	c.JSON(200,"hello")
+	c.JSON(200, "hello")
 }
 
 func (u *UserController) DeleteUser(c *gin.Context) {
-	id,err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		wzap.Error("类型转换异常")
 		util.OpFailFn(c, err)
 		return
 	}
-	wzap.Debug("delete user by id ","id",id)
+	wzap.Debug("delete user by id ", "id", id)
 	if err := service.User.Delete(id); err != nil {
 		wzap.Err(err)
 		util.OpFailFn(c, err)
 		return
 	}
 
-    c.JSON(200, "删除成功")
+	c.JSON(200, "删除成功")
 }
 
 //List user by page
-func (u *UserController) ListByPage(c *gin.Context)  {
-	page,_ := strconv.Atoi(c.Query("page"))
-	pageSize,_ := strconv.Atoi(c.Query("page_size"))
+func (u *UserController) ListByPage(c *gin.Context) {
+	page, _ := strconv.Atoi(c.Query("page"))
+	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
+	users, total, err := service.User.ListByPage(page, pageSize)
 
-	users,err := service.User.ListByPage(page,pageSize)
-
-	if  err != nil {
+	if err != nil {
 		wzap.Err(err)
 		util.OpFailFn(c, err)
 		return
 	}
-	c.JSON(200, users)
+	c.JSON(200, gin.H{
+		"code": 20000,
+		"data": map[string]interface{}{
+			"rows":  users,
+			"total": total,
+		},
+	})
 
 }
 

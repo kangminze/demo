@@ -52,7 +52,11 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 func (u *UserController) ListByPage(c *gin.Context) {
 	page, _ := strconv.Atoi(c.Query("page"))
 	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
-	users, total, err := service.User.ListByPage(page, pageSize)
+	content, ok := c.GetQuery("content")
+	if !ok {
+		content = ""
+	}
+	users, total, err := service.User.ListByPage(page, pageSize, content)
 
 	if err != nil {
 		wzap.Err(err)

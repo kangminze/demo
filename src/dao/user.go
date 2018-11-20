@@ -23,10 +23,13 @@ func DeleteUser(id int) error {
 
 }
 
-func ListByPage(page int, pageSize int) ([]model.User, int, error) {
+func ListByPage(page int, pageSize int, content string) ([]model.User, int, error) {
 	Db := db
 	users := make([]model.User, 0)
 	total := 0
+	if len(content) > 0 {
+		Db = Db.Where("username LIKE ?", "%"+content+"%")
+	}
 	Db.Model(&model.User{}).Count(&total)
 	Db = Db.Limit(pageSize).Offset((page - 1) * pageSize)
 	if err := Db.Find(&users).Error; err != nil {

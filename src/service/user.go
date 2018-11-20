@@ -17,6 +17,6 @@ func (user) Delete(id int) error {
 	return dao.DeleteUser(id)
 }
 
-func (user) ListByPage(page int, pageSize int) ([]model.User, int, error) {
-	return dao.ListByPage(page, pageSize)
+func (user) ListByPage(page int, pageSize int, content string) ([]model.User, int, error) {
+	return dao.ListByPage(page, pageSize, content)
 }

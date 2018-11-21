@@ -1,8 +1,7 @@
 package model
 
-
 type User struct {
-	ID uint `json:"id" gorm:"primary_key"`
+	ID       int    `json:"id" gorm:"primary_key"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
@@ -14,7 +13,7 @@ const (
 )
 
 type Task struct {
-	ID uint `json:"id" gorm:"primary_key"`
+	ID      int    `json:"id" gorm:"primary_key"`
 	Content string `json:"content"`
-	status int `json:"status"`
+	status  int    `json:"status"`
 }

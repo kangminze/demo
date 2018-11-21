@@ -38,3 +38,9 @@ func ListByPage(page int, pageSize int, content string) ([]model.User, int, erro
 	}
 	return users, total, nil
 }
+
+func FindByUsername(username string) (model.User, error) {
+	var user model.User = model.User{}
+	db.Where("username=?", username).First(&user)
+	return user, nil
+}

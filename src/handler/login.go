@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"demo/src/middleware/jwtpath"
+	"demo/src/service"
 	"demo/src/util"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/sevenNt/wzap"
+	"time"
 )
 
 type LoginController struct{}
@@ -24,10 +28,30 @@ func (login *LoginController) Login(c *gin.Context) {
 		return
 	}
 	wzap.Debug("login user ", "user", auth)
+	user, err := service.User.Validate(auth.Username, auth.Password)
+	//校验用户名密码
+	if err != nil {
+		util.OpFailFn(c, err)
+		return
+	}
+	//创建token信息
+	j := jwtpath.NewJWT()
+	claim := jwtpath.CustomClaims{
+		ID:   user.ID,
+		Name: user.Username,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+		},
+	}
+	token, err := j.CreateToken(claim)
+	if err != nil {
+		util.OpFailFn(c, err)
+		return
+	}
 	c.JSON(200, gin.H{
 		"code": 20000,
 		"data": map[string]interface{}{
-			"token": "testtssssssss",
+			"token": token,
 		},
 	})
 }

@@ -28,7 +28,10 @@ func (u *UserController) AddUser(c *gin.Context) {
 	}
 	wzap.Debug("user message", &tmpuser)
 	service.User.AddUser(&tmpuser)
-	c.JSON(200, "hello")
+	c.JSON(200, gin.H{
+		"code": 20000,
+		"data": "create success",
+	})
 }
 
 func (u *UserController) DeleteUser(c *gin.Context) {

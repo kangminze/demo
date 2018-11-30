@@ -1,11 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "demo/src/kubernetes"
 
 func main() {
-	fmt.Println(time.Now())
-	fmt.Print(time.Now().Add(24 * time.Hour).Unix())
+	client, _ := kubernetes.NewClient()
+	client.GetVirtualServices("default", "details")
 }

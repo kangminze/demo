@@ -48,7 +48,10 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, "删除成功")
+	c.JSON(200, gin.H{
+		"code": 20000,
+		"data": "删除成功",
+	})
 }
 
 //List user by page

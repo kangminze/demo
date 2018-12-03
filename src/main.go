@@ -18,7 +18,6 @@ package main
 
 import (
 	_ "demo/docs"
-	"demo/src/client"
 	"demo/src/dao"
 	"demo/src/log"
 	"demo/src/router"
@@ -35,11 +34,9 @@ func start() {
 	log.Init()
 	//初始化数据库
 	dao.Init()
-	//初始化kube
-	client.Init()
 
 	quit := make(chan os.Signal)
-	signal.Notify(quit,syscall.SIGINT, syscall.SIGEMT, syscall.SIGKILL)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGEMT, syscall.SIGKILL)
 
 	r := gin.Default()
 	router.Init(r)

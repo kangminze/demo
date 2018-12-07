@@ -39,6 +39,11 @@ func Init(e *gin.Engine) {
 		taskGroup.POST("/create", taskController.AddTasks)
 	}
 
+	serviceController := handler.NewServiceController()
+	serviceGroup := api.Group("/service")
+	{
+		serviceGroup.GET("/list", serviceController.ServiceList)
+	}
 	//swagger config
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

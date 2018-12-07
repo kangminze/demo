@@ -2,6 +2,7 @@ package kubernetes
 
 import (
 	"github.com/pkg/errors"
+	"k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -14,6 +15,8 @@ import (
 
 type IstioClientInterface interface {
 	GetVirtualServices(namespace string, serviceName string) ([]IstioObject, error)
+	GetServices(namespace string, selectorLabels map[string]string) ([]v1.Service, error)
+	GetPods(namespaces string, selectorLabels map[string]string) ([]v1.Pod, error)
 }
 
 type IstioClient struct {
